@@ -1,37 +1,54 @@
 ﻿#include "AudioUtil.h"
 
-void UAudioUtil::PlaySoundOnComponent(
-	EFinishedBranch& branch,
-	USoundBase* sound,
+#include "AudioPlaybackAction.h"
+
+void UAudioUtil::PlaySoundCore(
+	UObject* world_ctx, FLatentActionInfo latent_info,
 	UAudioComponent* audio_comp,
-	float volume, float pitch
-) {
-	if (!(sound && audio_comp)) return;
-
-	// Getting a smart reference to the branch
-	// FIXME: Doesn't work!! Can't convert the ref to a TSharedPtr without it copying the value
-	TSharedPtr<EFinishedBranch> branch_ptr(&branch, [](EFinishedBranch*) {});
-	// TSharedPtr<EFinishedBranch> branch_ptr = MakeShareable(&branch);
+	USoundBase* sound,
+	float volume, float pitch)
+{
+	// World stuff
+	UWorld* world = world_ctx->GetWorld();
+	if (!world) return;
 	
-	// Make a new playback handler
-	UAudioUtilPlayer* playbackHandler = NewObject<UAudioUtilPlayer>();
-	playbackHandler->Initialize(branch_ptr, audio_comp);
-	playbackHandler->SetDetails(volume, pitch);
-
-	// Playing the audio
-	playbackHandler->Play(sound);	
+	// Spawning the action
+	FLatentActionManager& action_manager = world->GetLatentActionManager();
+	if (action_manager.FindExistingAction<FPendingLatentAction>(latent_info.CallbackTarget.Get(), latent_info.UUID) == nullptr)
+	{
+		FAudioPlaybackAction* action = new FAudioPlaybackAction(
+			latent_info, audio_comp, sound, volume, pitch
+		);
+		action_manager.AddNewAction(latent_info.CallbackTarget.Get(), latent_info.UUID, action);
+	}
 }
 
-void UAudioUtil::PlaySoundAttached(
-	EFinishedBranch& branch,
+void UAudioUtil::PlaySoundOnComponent(
+	UObject* world_ctx, FLatentActionInfo latent_info,
+	UAudioComponent* audio_comp,
 	USoundBase* sound,
+	float volume, float pitch)
+{
+	if (!(sound && audio_comp)) return;
+	
+	// Play the audio and set up the latent
+	PlaySoundCore(world_ctx, latent_info, audio_comp, sound, volume, pitch);
+}
+
+// TODO: Make this not as messy as it currently is
+void UAudioUtil::PlaySoundAttached(
+	UObject* world_ctx, FLatentActionInfo latent_info,
 	USceneComponent* attach_comp,
 	USoundAttenuation* attenuation,
-	float volume, float pitch
-) {
-	if (!(sound && attach_comp)) return;
+	USoundBase* sound,
+	float volume, float pitch)
+{
+	UAudioComponent* audio_comp = UGameplayStatics::SpawnSoundAttached(
+		sound, attach_comp,
+		NAME_None, FVector::Zero(), FRotator::ZeroRotator, EAttachLocation::KeepWorldPosition, false,
+		volume, pitch, 0, attenuation
+	);
 
-	// TODO: Set attenuation on the audio component
-	UAudioComponent* audio_comp = UGameplayStatics::SpawnSoundAttached(sound, attach_comp);
-	PlaySoundOnComponent(branch, sound, audio_comp, volume, pitch);
+	// Play the audio and set up the latent
+	PlaySoundOnComponent(world_ctx, latent_info, audio_comp, sound, volume, pitch);
 }
