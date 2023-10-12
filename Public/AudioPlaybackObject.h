@@ -12,10 +12,9 @@ class UTILITY_API UAudioPlaybackObject : public UObject
 
 public:
 	bool bIsFinished = false;
-	UPROPERTY() USoundAttenuation* Attenuation    = nullptr;
-	UPROPERTY() UAudioComponent*   AudioComponent = nullptr;
+	UPROPERTY() UAudioComponent* AudioComponent = nullptr;
 
-	void Initialize(UAudioComponent* audio_component, USoundAttenuation* attenuation=nullptr);
+	void Initialize(UAudioComponent* audio_component);
 	void Play(USoundBase* sound, float volume = 1.0, float pitch = 1.0);
 	
 	UFUNCTION()

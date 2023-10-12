@@ -34,7 +34,7 @@ public:
 		USoundBase* sound,
 		float volume = 1.0,
 		float pitch = 1.0
-	);
+		);
 	
 	UFUNCTION(BlueprintCallable, meta=(
 		Latent, LatentInfo="latent_info",
@@ -44,8 +44,22 @@ public:
 	static void PlaySoundAttached(
 		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
 		USceneComponent* attach_comp,
-		USoundAttenuation* attenuation,
 		USoundBase* sound,
+		USoundAttenuation* attenuation,
+		float volume = 1.0,
+		float pitch = 1.0
+	);
+	
+	UFUNCTION(BlueprintCallable, meta=(
+		Latent, LatentInfo="latent_info",
+		HidePin = "world_ctx", DefaultToSelf = "world_ctx"
+	))
+	/** Play audio at a location and listen for the audio to finish */
+	static void PlaySoundAtLocation(
+		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
+		FVector location,
+		USoundBase* sound,
+		USoundAttenuation* attenuation,
 		float volume = 1.0,
 		float pitch = 1.0
 	);

@@ -1,9 +1,8 @@
 ﻿#include "AudioPlaybackObject.h"
 
-void UAudioPlaybackObject::Initialize(UAudioComponent* audio_component, USoundAttenuation* attenuation)
+void UAudioPlaybackObject::Initialize(UAudioComponent* audio_component)
 {
 	AudioComponent = audio_component;
-	Attenuation = attenuation;
 	AudioComponent->OnAudioFinished.AddDynamic(this, &UAudioPlaybackObject::OnAudioFinished);
 }
 
@@ -23,9 +22,6 @@ void UAudioPlaybackObject::Play(USoundBase* sound, float volume, float pitch)
 		UE_LOG(LogTemp, Error, TEXT("No audio sound clip"));
 	AudioComponent->VolumeMultiplier = volume;
 	AudioComponent->PitchMultiplier = pitch;
-
-	// TODO: Set up the attenuation here!
-	//if (IsValid(Attenuation)) AudioComponent->SetAttenuation(Attenuation);
 	
 	// Playing and hooking audio based on the type
 	AudioComponent->Play();
