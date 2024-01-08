@@ -16,34 +16,34 @@ class UTILITY_API UAudioUtil : public UBlueprintFunctionLibrary
 
 protected:
 	static void PlaySoundCore(
-		UObject* world_ctx, FLatentActionInfo latent_info,
-		UAudioComponent* audio_comp,
+		const UObject* worldCtx, const FLatentActionInfo& latentInfo,
+		UAudioComponent* audioComp,
 		USoundBase* sound,
 		float volume = 1.0, float pitch = 1.0
 	);
 	
 public:
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info",
-		HidePin = "world_ctx", DefaultToSelf = "world_ctx"
+		Latent, LatentInfo="latentInfo",
+		HidePin = "worldCtx", DefaultToSelf = "worldCtx"
 	))
 	/** Play audio and listen for the audio to finish */
 	static void PlaySoundOnComponent(
-		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
-		UAudioComponent* audio_comp,
+		/* Async stuff: */ UObject* worldCtx, FLatentActionInfo latentInfo,
+		UAudioComponent* audioComp,
 		USoundBase* sound,
 		float volume = 1.0,
 		float pitch = 1.0
-		);
+	);
 	
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info",
-		HidePin = "world_ctx", DefaultToSelf = "world_ctx"
+		Latent, LatentInfo="latentInfo",
+		HidePin = "worldCtx", DefaultToSelf = "worldCtx"
 	))
 	/** Play audio from a component and listen for the audio to finish */
 	static void PlaySoundAttached(
-		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
-		USceneComponent* attach_comp,
+		/* Async stuff: */ UObject* worldCtx, FLatentActionInfo latentInfo,
+		USceneComponent* attachComp,
 		USoundBase* sound,
 		USoundAttenuation* attenuation,
 		float volume = 1.0,
@@ -51,12 +51,12 @@ public:
 	);
 	
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info",
-		HidePin = "world_ctx", DefaultToSelf = "world_ctx"
+		Latent, LatentInfo="latentInfo",
+		HidePin = "worldCtx", DefaultToSelf = "worldCtx"
 	))
 	/** Play audio at a location and listen for the audio to finish */
 	static void PlaySoundAtLocation(
-		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
+		/* Async stuff: */ UObject* worldCtx, FLatentActionInfo latentInfo,
 		FVector location,
 		USoundBase* sound,
 		USoundAttenuation* attenuation,

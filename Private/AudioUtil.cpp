@@ -3,68 +3,74 @@
 #include "AudioPlaybackAction.h"
 
 void UAudioUtil::PlaySoundCore(
-	UObject* world_ctx, FLatentActionInfo latent_info,
-	UAudioComponent* audio_comp,
+	const UObject* worldCtx, const FLatentActionInfo& latentInfo,
+	UAudioComponent* audioComp,
 	USoundBase* sound,
 	float volume, float pitch)
 {
 	// World stuff
-	UWorld* world = world_ctx->GetWorld();
+	UWorld* world = worldCtx->GetWorld();
 	if (!world) return;
 	
 	// Spawning the action
-	FLatentActionManager& action_manager = world->GetLatentActionManager();
-	if (action_manager.FindExistingAction<FPendingLatentAction>(latent_info.CallbackTarget.Get(), latent_info.UUID) == nullptr)
+	FLatentActionManager& actionManager = world->GetLatentActionManager();
+	if (actionManager.FindExistingAction<FPendingLatentAction>(latentInfo.CallbackTarget.Get(), latentInfo.UUID) == nullptr)
 	{
+		volume = audioComp->VolumeMultiplier * volume;
+		pitch  = audioComp->PitchMultiplier * pitch;
 		FAudioPlaybackAction* action = new FAudioPlaybackAction(
-			latent_info, audio_comp, sound, volume, pitch
+			latentInfo, audioComp, sound, volume, pitch
 		);
-		action_manager.AddNewAction(latent_info.CallbackTarget.Get(), latent_info.UUID, action);
+		actionManager.AddNewAction(latentInfo.CallbackTarget.Get(), latentInfo.UUID, action);
 	}
 }
 
 void UAudioUtil::PlaySoundOnComponent(
-	UObject* world_ctx, FLatentActionInfo latent_info,
-	UAudioComponent* audio_comp,
+	UObject* worldCtx, FLatentActionInfo latentInfo,
+	UAudioComponent* audioComp,
 	USoundBase* sound,
 	float volume, float pitch)
 {
-	if (!IsValid(sound) || !IsValid(audio_comp)) return;
+	if (!IsValid(sound) || !IsValid(audioComp)) return;
 
 	// Play the audio and set up the latent
-	PlaySoundCore(world_ctx, latent_info, audio_comp, sound, volume, pitch);
+	PlaySoundCore(worldCtx, latentInfo, audioComp, sound, volume, pitch);
 }
 
 // TODO: Make this not as messy as it currently is
 void UAudioUtil::PlaySoundAttached(
-	UObject* world_ctx, FLatentActionInfo latent_info,
-	USceneComponent* attach_comp,
+	UObject* worldCtx, FLatentActionInfo latentInfo,
+	USceneComponent* attachComp,
 	USoundBase* sound,
 	USoundAttenuation* attenuation,
 	float volume, float pitch)
 {
-	UAudioComponent* audio_comp = UGameplayStatics::SpawnSoundAttached(
-		sound, attach_comp,
+	if (!IsValid(sound)) return;
+	
+	UAudioComponent* audioComp = UGameplayStatics::SpawnSoundAttached(
+		sound, attachComp,
 		NAME_None, FVector::Zero(), FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, false,
-		volume, pitch, 0, attenuation
+		1.0, 1.0, 0, attenuation
 	);
 
 	// Play the audio and set up the latent
-	PlaySoundOnComponent(world_ctx, latent_info, audio_comp, sound, volume, pitch);
+	PlaySoundCore(worldCtx, latentInfo, audioComp, sound, volume, pitch);
 }
 
 void UAudioUtil::PlaySoundAtLocation(
-	UObject* world_ctx, FLatentActionInfo latent_info,
+	UObject* worldCtx, FLatentActionInfo latentInfo,
 	FVector location,
 	USoundBase* sound,
 	USoundAttenuation* attenuation,
 	float volume, float pitch)
 {
-	UAudioComponent* audio_comp = UGameplayStatics::SpawnSoundAtLocation(
-		world_ctx, sound, location, FRotator::ZeroRotator,
-		volume, pitch, 0, attenuation
+	if (!IsValid(sound)) return;
+	
+	UAudioComponent* audioComp = UGameplayStatics::SpawnSoundAtLocation(
+		worldCtx, sound, location, FRotator::ZeroRotator,
+		1.0, 1.0, 0, attenuation
 	);
 	
 	// Play the audio and set up the latent
-	PlaySoundOnComponent(world_ctx, latent_info, audio_comp, sound, volume, pitch);
+	PlaySoundCore(worldCtx, latentInfo, audioComp, sound, volume, pitch);
 }
