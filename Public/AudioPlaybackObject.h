@@ -6,16 +6,14 @@
 
 /** */
 UCLASS()
-class UTILITY_API UAudioPlaybackObject : public UObject
-{
+class UTILITY_API UAudioPlaybackObject : public UObject {
 	GENERATED_BODY()
-
 public:
 	bool bIsFinished = false;
 	UPROPERTY() UAudioComponent* AudioComponent = nullptr;
 
 	void Initialize(UAudioComponent* audioComponent);
-	void Play(USoundBase* sound, float volume = 1.0, float pitch = 1.0);
+	void Play(USoundBase* sound) const;
 	
 	UFUNCTION()
 	void OnAudioFinished();

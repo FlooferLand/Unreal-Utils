@@ -1,10 +1,8 @@
 ﻿#pragma once
 #include "AudioPlaybackObject.h"
 #include "LatentActions.h"
-#include "Components/AudioComponent.h"
 
-class FAudioPlaybackAction : public FPendingLatentAction
-{
+class FAudioPlaybackAction : public FPendingLatentAction {
 public:
 	// Variables
 	TStrongObjectPtr<UAudioPlaybackObject> PlaybackObject = nullptr;
@@ -16,15 +14,14 @@ public:
 	
 	// Construction / functions
 	FAudioPlaybackAction(
-		const FLatentActionInfo& info,
-		UAudioComponent* audio_comp,
-		USoundBase* sound,
-		float volume, float pitch)
+		FLatentActionInfo& info,
+		UAudioComponent* audioComp,
+		USoundBase* sound)
 	{
 		// Creating a new playback object
 		PlaybackObject = TStrongObjectPtr(NewObject<UAudioPlaybackObject>());
-		PlaybackObject->Initialize(audio_comp);
-		PlaybackObject->Play(sound, volume, pitch);
+		PlaybackObject->Initialize(audioComp);
+		PlaybackObject->Play(sound);
 
 		// Latent stuff
 		ExecutionFunction = info.ExecutionFunction;
@@ -32,11 +29,10 @@ public:
 		CallbackTarget = info.CallbackTarget;
 	}
 
-	virtual void UpdateOperation(FLatentResponse& response) override
-	{
+	virtual void UpdateOperation(FLatentResponse& response) override {
 		// TODO: FIX THIS FUCKERY. USE THE OnAudioFinished DELEGATE INSTEAD
 		//const bool is_finished = !PlaybackObject->AudioComponent->IsPlaying();
-		bool is_finished = PlaybackObject->bIsFinished;
-		response.FinishAndTriggerIf(is_finished, ExecutionFunction, OutputLink, CallbackTarget);
+		bool isFinished = PlaybackObject->bIsFinished;
+		response.FinishAndTriggerIf(isFinished, ExecutionFunction, OutputLink, CallbackTarget);
 	}
 };

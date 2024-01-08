@@ -1,10 +1,7 @@
 ﻿#pragma once
 #include "CoreMinimal.h"
-#include "AudioPlaybackObject.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/GameplayStatics.h"
-#include "Components/AudioComponent.h"
 #include "AudioUtilCommon.h"
 #include "AudioUtil.generated.h"
 
@@ -18,8 +15,7 @@ protected:
 	static void PlaySoundCore(
 		const UObject* worldCtx, const FLatentActionInfo& latentInfo,
 		UAudioComponent* audioComp,
-		USoundBase* sound,
-		float volume = 1.0, float pitch = 1.0
+		USoundBase* sound
 	);
 	
 public:
@@ -29,11 +25,10 @@ public:
 	))
 	/** Play audio and listen for the audio to finish */
 	static void PlaySoundOnComponent(
-		/* Async stuff: */ UObject* worldCtx, FLatentActionInfo latentInfo,
+		/* Async stuff: */
+		UObject* worldCtx, FLatentActionInfo latentInfo,
 		UAudioComponent* audioComp,
-		USoundBase* sound,
-		float volume = 1.0,
-		float pitch = 1.0
+		USoundBase* sound
 	);
 	
 	UFUNCTION(BlueprintCallable, meta=(
