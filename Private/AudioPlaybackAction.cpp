@@ -3,21 +3,22 @@
 
 FAudioPlaybackAction::FAudioPlaybackAction(FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound) {
 	// Safety guard
+	AudioComponent = TStrongObjectPtr(audioComp);
 	if (!IsValid(audioComp)) {
 		UE_LOG(LogTemp, Error, TEXT("No audio component set"));
 		return;
 	}
 
 	// Binding
-	audioComp->OnAudioFinishedNative.AddLambda([this](UAudioComponent* comp) {
+	AudioComponent->OnAudioFinishedNative.AddLambda([this](UAudioComponent* comp) {
 		this->bIsFinished = true;
 		FMessageDialog::Debugf(FText::FromString("OnAudioFinishedNative"));
 	});
 	
 	// Playing the audio
 	if (IsValid(sound)) {
-		audioComp->SetSound(sound);
-		audioComp->Play();
+		AudioComponent->SetSound(sound);
+		AudioComponent->Play();
 	} else {
 		UE_LOG(LogTemp, Error, TEXT("No audio sound clip"));
 	}

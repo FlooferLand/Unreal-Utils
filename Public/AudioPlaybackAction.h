@@ -4,6 +4,7 @@
 class FAudioPlaybackAction : public FPendingLatentAction {
 public:
 	// Variables
+	TStrongObjectPtr<UAudioComponent> AudioComponent = nullptr;
 	bool bIsFinished = false;
 
 	// Latent variables
