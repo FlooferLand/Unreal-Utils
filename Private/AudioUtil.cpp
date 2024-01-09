@@ -1,5 +1,5 @@
 ﻿#include "AudioUtil.h"
-#include "AudioPlaybackAction.cpp"
+#include "AudioPlaybackAction.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
 

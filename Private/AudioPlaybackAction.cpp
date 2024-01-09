@@ -3,12 +3,11 @@
 
 FAudioPlaybackAction::FAudioPlaybackAction(FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound) {
 	AudioComponent = TStrongObjectPtr(audioComp);
-	if (!AudioComponent->OnAudioFinishedNative.IsBound()) {
-		AudioComponent->OnAudioFinishedNative.AddLambda([this](UAudioComponent* comp) {
-			this->bIsFinished = true;
-			FMessageDialog::Debugf(FText::FromString("OnAudioFinishedNative"));
-		});
-	}
+	AudioComponent->OnAudioFinishedNative.AddLambda([this](UAudioComponent* comp) {
+		this->bIsFinished = true;
+		FMessageDialog::Debugf(FText::FromString("OnAudioFinishedNative"));
+	});
+	
 	Play(sound);
 
 	// Latent stuff
@@ -33,10 +32,6 @@ void FAudioPlaybackAction::Play(USoundBase* sound) {
 	}
 }
 
-void FAudioPlaybackAction::UpdateOperation(FLatentResponse& response) {	
-	// TODO: FIX THIS FUCKERY. USE THE OnAudioFinished DELEGATE INSTEAD
-	/*if (isFinished) {
-		FMessageDialog::Debugf(FText::FromString("UAudioPlaybackAction->PlayBackObject->bIsFinished"));
-	}*/
+void FAudioPlaybackAction::UpdateOperation(FLatentResponse& response) {
 	response.FinishAndTriggerIf(bIsFinished, ExecutionFunction, OutputLink, CallbackTarget);
 }
