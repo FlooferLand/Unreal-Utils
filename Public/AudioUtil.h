@@ -13,7 +13,7 @@ class UTILITY_API UAudioUtil : public UBlueprintFunctionLibrary
 
 protected:	
 	static void PlaySoundCore(
-		UObject* worldCtx, FLatentActionInfo& latentInfo,
+		const UObject* worldCtx, FLatentActionInfo& latentInfo,
 		UAudioComponent* audioComp,
 		USoundBase* sound
 	);

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "LatentActions.h"
 
-class FAudioPlaybackAction : public FPendingLatentAction {
+class FAudioPlaybackAction final : public FPendingLatentAction {
 public:
 	// Variables
 	TStrongObjectPtr<UAudioComponent> AudioComponent = nullptr;
@@ -13,6 +13,6 @@ public:
 	TObjectPtr<UObject> CallbackTarget;
 	
 	// Construction / methods
-	FAudioPlaybackAction(FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound);
+	FAudioPlaybackAction(const FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound);
 	virtual void UpdateOperation(FLatentResponse& response) override;
 };

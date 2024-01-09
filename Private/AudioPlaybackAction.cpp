@@ -1,7 +1,7 @@
 ﻿#include "AudioPlaybackAction.h"
 #include "Components/AudioComponent.h"
 
-FAudioPlaybackAction::FAudioPlaybackAction(FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound) {
+FAudioPlaybackAction::FAudioPlaybackAction(const FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound) {
 	// Safety guard
 	AudioComponent = TStrongObjectPtr(audioComp);
 	if (!IsValid(audioComp)) {

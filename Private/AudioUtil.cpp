@@ -4,7 +4,7 @@
 #include "Components/AudioComponent.h"
 
 void UAudioUtil::PlaySoundCore(
-	UObject* worldCtx, FLatentActionInfo& latentInfo,
+	const UObject* worldCtx, FLatentActionInfo& latentInfo,
 	UAudioComponent* audioComp,
 	USoundBase* sound)
 {
