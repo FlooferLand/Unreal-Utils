@@ -15,6 +15,11 @@ FAudioPlaybackAction::FAudioPlaybackAction(FLatentActionInfo& info, UAudioCompon
 		FMessageDialog::Debugf(FText::FromString("OnAudioFinishedNative"));
 	});
 	
+	// This won't even compile
+	/*AudioComponent->OnAudioPlaybackPercentNative.AddLambda([this](USoundWave* sound, float progress) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.0, FColor::Red, FString::SanitizeFloat(progress));
+	});*/
+	
 	// Playing the audio
 	if (IsValid(sound)) {
 		AudioComponent->SetSound(sound);

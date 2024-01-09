@@ -11,6 +11,7 @@ void UAudioUtil::PlaySoundCore(
 	// World stuff
 	UWorld* world = worldCtx->GetWorld();
 	if (!IsValid(world)) return;
+	audioComp->bAutoDestroy = false;
 	
 	// Spawning the action
 	FLatentActionManager& actionManager = world->GetLatentActionManager();
