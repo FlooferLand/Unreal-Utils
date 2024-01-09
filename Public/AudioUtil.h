@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "CoreMinimal.h"
+#include "AudioPlaybackObject.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameFramework/Actor.h"
 #include "AudioUtilCommon.h"
@@ -11,9 +12,9 @@ class UTILITY_API UAudioUtil : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
-protected:
+protected:	
 	static void PlaySoundCore(
-		const UObject* worldCtx, const FLatentActionInfo& latentInfo,
+		UObject* worldCtx, FLatentActionInfo& latentInfo,
 		UAudioComponent* audioComp,
 		USoundBase* sound
 	);

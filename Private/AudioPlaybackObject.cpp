@@ -24,5 +24,5 @@ void UAudioPlaybackObject::Play(USoundBase* sound) const {
 // TODO: Fix this getting called immediately sometimes
 void UAudioPlaybackObject::OnAudioFinished() {
 	bIsFinished = true;
-	// FMessageDialog::Debugf(FText::FromString("OnAudioFinished()"));
+	FMessageDialog::Debugf(FText::FromString("UAudioPlaybackObject::OnAudioFinished()"));
 }

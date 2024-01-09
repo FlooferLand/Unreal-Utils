@@ -31,8 +31,10 @@ public:
 
 	virtual void UpdateOperation(FLatentResponse& response) override {
 		// TODO: FIX THIS FUCKERY. USE THE OnAudioFinished DELEGATE INSTEAD
-		//const bool is_finished = !PlaybackObject->AudioComponent->IsPlaying();
 		bool isFinished = PlaybackObject->bIsFinished;
+		if (isFinished) {
+			FMessageDialog::Debugf(FText::FromString("UAudioPlaybackAction->PlayBackObject->bIsFinished"));
+		}
 		response.FinishAndTriggerIf(isFinished, ExecutionFunction, OutputLink, CallbackTarget);
 	}
 };
