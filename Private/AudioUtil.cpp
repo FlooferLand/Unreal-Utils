@@ -1,5 +1,5 @@
 ﻿#include "AudioUtil.h"
-#include "AudioPlaybackAction.h"
+#include "AudioPlaybackAction.cpp"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
 
@@ -18,7 +18,7 @@ void UAudioUtil::PlaySoundCore(
 		FAudioPlaybackAction* action = new FAudioPlaybackAction(
 			latentInfo, audioComp, sound
 		);
-		actionManager.AddNewAction(latentInfo.CallbackTarget.Get(), latentInfo.UUID, action);
+		actionManager.AddNewAction(latentInfo.CallbackTarget, latentInfo.UUID, action);
 	}
 }
 
