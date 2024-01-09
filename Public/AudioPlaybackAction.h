@@ -15,6 +15,5 @@ public:
 	// Construction / methods
 	FAudioPlaybackAction(FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound);
 	void Play(USoundBase* sound);
-	void OnAudioFinished();
 	virtual void UpdateOperation(FLatentResponse& response) override;
 };

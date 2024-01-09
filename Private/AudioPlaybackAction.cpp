@@ -2,11 +2,13 @@
 #include "Components/AudioComponent.h"
 
 FAudioPlaybackAction::FAudioPlaybackAction(FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound) {
-	// Creating a new playback object
 	AudioComponent = TStrongObjectPtr(audioComp);
-	AudioComponent->OnAudioFinishedNative.AddLambda([this] {
-		OnAudioFinished();
-	});
+	if (!AudioComponent->OnAudioFinishedNative.IsBound()) {
+		AudioComponent->OnAudioFinishedNative.AddLambda([this](UAudioComponent* comp) {
+			this->bIsFinished = true;
+			FMessageDialog::Debugf(FText::FromString("OnAudioFinishedNative"));
+		});
+	}
 	Play(sound);
 
 	// Latent stuff
@@ -29,12 +31,6 @@ void FAudioPlaybackAction::Play(USoundBase* sound) {
 	} else {
 		UE_LOG(LogTemp, Error, TEXT("No audio sound clip"));
 	}
-}
-
-// TODO: Fix this getting called immediately sometimes
-void FAudioPlaybackAction::OnAudioFinished() {
-	bIsFinished = true;
-	FMessageDialog::Debugf(FText::FromString("UAudioPlaybackObject::OnAudioFinished()"));
 }
 
 void FAudioPlaybackAction::UpdateOperation(FLatentResponse& response) {	
