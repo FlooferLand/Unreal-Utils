@@ -10,7 +10,7 @@ void UAudioUtil::PlaySoundCore(
 {
 	// World stuff
 	UWorld* world = worldCtx->GetWorld();
-	if (!IsValid(world)) return;
+	if (!IsValid(world) || !IsValid(audioComp) || !IsValid(sound) || !IsValid(worldCtx)) return;
 	audioComp->bAutoDestroy = false;
 	
 	// Spawning the action
@@ -43,7 +43,7 @@ void UAudioUtil::PlaySoundAttached(
 	USoundAttenuation* attenuation,
 	float volume, float pitch)
 {
-	if (!IsValid(sound)) return;
+	if (!IsValid(sound) || !IsValid(attachComp)) return;
 	
 	UAudioComponent* audioComp = UGameplayStatics::SpawnSoundAttached(
 		sound, attachComp,
