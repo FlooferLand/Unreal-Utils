@@ -1,11 +1,13 @@
 ﻿#include "AudioPlaybackAction.h"
+
+#include "BackendUtil.h"
 #include "Components/AudioComponent.h"
 
 FAudioPlaybackAction::FAudioPlaybackAction(const FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound) {
 	// Safety guard
 	AudioComponent = TStrongObjectPtr(audioComp);
 	if (!IsValid(audioComp)) {
-		UE_LOG(LogTemp, Error, TEXT("No audio component set"));
+		BackendUtil::LogError("No audio component set");
 		return;
 	}
 

@@ -1,5 +1,6 @@
 ﻿#include "AudioUtil.h"
 #include "AudioPlaybackAction.h"
+#include "BackendUtil.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
 
@@ -9,11 +10,18 @@ void UAudioUtil::PlaySoundCore(
 	USoundBase* sound)
 {
 	// World stuff
+	if (!IsValid(worldCtx) || !IsValid(audioComp) || !IsValid(sound)) {
+		BackendUtil::LogError("Invalid worldCtx, audioComp, or sound in PlaySoundCore");
+		return;
+	}
 	UWorld* world = worldCtx->GetWorld();
-	if (!IsValid(world) || !IsValid(audioComp) || !IsValid(sound) || !IsValid(worldCtx)) return;
 	audioComp->bAutoDestroy = false;
 	
 	// Spawning the action
+	if (!IsValid(world)) {
+		BackendUtil::LogError("Invalid world in PlaySoundCore");
+		return;
+	}
 	FLatentActionManager& actionManager = world->GetLatentActionManager();
 	if (actionManager.FindExistingAction<FPendingLatentAction>(latentInfo.CallbackTarget.Get(), latentInfo.UUID) == nullptr) {
 		FAudioPlaybackAction* action = new FAudioPlaybackAction(
