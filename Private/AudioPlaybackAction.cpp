@@ -7,22 +7,22 @@ FAudioPlaybackAction::FAudioPlaybackAction(const FLatentActionInfo& info, UAudio
 	// Safety guard
 	AudioComponent = TStrongObjectPtr(audioComp);
 	if (!IsValid(audioComp)) {
-		BackendUtil::LogError("No audio component set");
+		BackendUtil::LogError("No audio component passed to AudioPlaybackAction");
+		return;
+	}
+	if (!IsValid(sound)) {
+		BackendUtil::LogError("No sound passed to AudioPlaybackAction");
 		return;
 	}
 
 	// Binding
-	AudioComponent->OnAudioFinishedNative.AddLambda([this](UAudioComponent* comp) {
+	AudioComponent->OnAudioFinishedNative.AddLambda([this](UAudioComponent* _) {
 		this->bIsFinished = true;
 	});
 	
 	// Playing the audio
-	if (IsValid(sound)) {
-		AudioComponent->SetSound(sound);
-		AudioComponent->Play();
-	} else {
-		UE_LOG(LogTemp, Error, TEXT("No audio sound clip"));
-	}
+	AudioComponent->SetSound(sound);
+	AudioComponent->Play();
 
 	// Latent stuff
 	ExecutionFunction = info.ExecutionFunction;

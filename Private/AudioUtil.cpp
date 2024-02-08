@@ -5,28 +5,26 @@
 #include "Components/AudioComponent.h"
 
 void UAudioUtil::PlaySoundCore(
-	const UObject* worldCtx, FLatentActionInfo& latentInfo,
+	const UObject* worldCtx, const FLatentActionInfo& latentInfo,
 	UAudioComponent* audioComp,
 	USoundBase* sound)
 {
 	// World stuff
 	if (!IsValid(worldCtx) || !IsValid(audioComp) || !IsValid(sound)) {
-		BackendUtil::LogError("Invalid worldCtx, audioComp, or sound in PlaySoundCore");
+		BackendUtil::LogError("Safety guard in UAudioUtil::PlaySoundAttached failed");
 		return;
 	}
-	UWorld* world = worldCtx->GetWorld();
 	audioComp->bAutoDestroy = false;
 	
 	// Spawning the action
+	UWorld* world = worldCtx->GetWorld();
 	if (!IsValid(world)) {
 		BackendUtil::LogError("Invalid world in PlaySoundCore");
 		return;
 	}
 	FLatentActionManager& actionManager = world->GetLatentActionManager();
 	if (actionManager.FindExistingAction<FPendingLatentAction>(latentInfo.CallbackTarget.Get(), latentInfo.UUID) == nullptr) {
-		FAudioPlaybackAction* action = new FAudioPlaybackAction(
-			latentInfo, audioComp, sound
-		);
+		FAudioPlaybackAction* action = new FAudioPlaybackAction(latentInfo, audioComp, sound);
 		actionManager.AddNewAction(latentInfo.CallbackTarget, latentInfo.UUID, action);
 	}
 }
@@ -37,8 +35,6 @@ void UAudioUtil::PlaySoundOnComponent(
 	UAudioComponent* audioComp,
 	USoundBase* sound)
 {
-	if (!IsValid(sound) || !IsValid(audioComp)) return;
-
 	// Play the audio and set up the latent
 	PlaySoundCore(worldCtx, latentInfo, audioComp, sound);
 }
@@ -51,7 +47,10 @@ void UAudioUtil::PlaySoundAttached(
 	USoundAttenuation* attenuation,
 	float volume, float pitch)
 {
-	if (!IsValid(sound) || !IsValid(attachComp)) return;
+	if (!IsValid(sound) || !IsValid(attachComp)) {
+		BackendUtil::LogError("Safety guard in UAudioUtil::PlaySoundAttached failed");
+		return;
+	}
 	
 	UAudioComponent* audioComp = UGameplayStatics::SpawnSoundAttached(
 		sound, attachComp,
@@ -70,7 +69,10 @@ void UAudioUtil::PlaySoundAtLocation(
 	USoundAttenuation* attenuation,
 	float volume, float pitch)
 {
-	if (!IsValid(sound)) return;
+	if (!IsValid(worldCtx) && !IsValid(sound) && !IsValid(attenuation)) {
+		BackendUtil::LogError("Safety guard in UAudioUtil::PlaySoundAtLocation failed");
+		return;
+	}
 	
 	UAudioComponent* audioComp = UGameplayStatics::SpawnSoundAtLocation(
 		worldCtx, sound, location, FRotator::ZeroRotator,
