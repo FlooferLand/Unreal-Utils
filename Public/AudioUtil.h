@@ -24,8 +24,8 @@ protected:
 	
 public:
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info",
-		HidePin = "world_ctx", DefaultToSelf = "world_ctx"
+		Latent, LatentInfo="latent_info", WorldContext="world_ctx",
+		Keywords="Play Sound Audio Component"
 	))
 	/** Play audio and listen for the audio to finish */
 	static void PlaySoundOnComponent(
@@ -37,8 +37,8 @@ public:
 		);
 	
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info",
-		HidePin = "world_ctx", DefaultToSelf = "world_ctx"
+		Latent, LatentInfo="latent_info", WorldContext="world_ctx",
+		Keywords="Play Sound Audio Attached"
 	))
 	/** Play audio from a component and listen for the audio to finish */
 	static void PlaySoundAttached(
@@ -51,8 +51,8 @@ public:
 	);
 	
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info",
-		HidePin = "world_ctx", DefaultToSelf = "world_ctx"
+		Latent, LatentInfo="latent_info", WorldContext="world_ctx",
+		Keywords="Play Sound Audio Location"
 	))
 	/** Play audio at a location and listen for the audio to finish */
 	static void PlaySoundAtLocation(
