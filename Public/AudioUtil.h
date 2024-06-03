@@ -1,10 +1,7 @@
 ﻿#pragma once
 #include "CoreMinimal.h"
-#include "AudioPlaybackObject.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/GameplayStatics.h"
-#include "Components/AudioComponent.h"
 #include "AudioUtilCommon.h"
 #include "AudioUtil.generated.h"
 
@@ -14,36 +11,34 @@ class UTILITY_API UAudioUtil : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
-protected:
+protected:	
 	static void PlaySoundCore(
-		UObject* world_ctx, FLatentActionInfo latent_info,
-		UAudioComponent* audio_comp,
-		USoundBase* sound,
-		float volume = 1.0, float pitch = 1.0
+		const UObject* worldCtx, const FLatentActionInfo& latentInfo,
+		UAudioComponent* audioComp,
+		USoundBase* sound
 	);
 	
 public:
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info", WorldContext="world_ctx",
-		Keywords="Play Sound Audio Component"
+		Latent, LatentInfo="latentInfo",
+		HidePin = "worldCtx", DefaultToSelf = "worldCtx"
 	))
 	/** Play audio and listen for the audio to finish */
 	static void PlaySoundOnComponent(
-		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
-		UAudioComponent* audio_comp,
-		USoundBase* sound,
-		float volume = 1.0,
-		float pitch = 1.0
-		);
+		/* Async stuff: */
+		UObject* worldCtx, FLatentActionInfo latentInfo,
+		UAudioComponent* audioComp,
+		USoundBase* sound
+	);
 	
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info", WorldContext="world_ctx",
-		Keywords="Play Sound Audio Attached"
+		Latent, LatentInfo="latentInfo",
+		HidePin = "worldCtx", DefaultToSelf = "worldCtx"
 	))
 	/** Play audio from a component and listen for the audio to finish */
 	static void PlaySoundAttached(
-		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
-		USceneComponent* attach_comp,
+		/* Async stuff: */ UObject* worldCtx, FLatentActionInfo latentInfo,
+		USceneComponent* attachComp,
 		USoundBase* sound,
 		USoundAttenuation* attenuation,
 		float volume = 1.0,
@@ -51,12 +46,12 @@ public:
 	);
 	
 	UFUNCTION(BlueprintCallable, meta=(
-		Latent, LatentInfo="latent_info", WorldContext="world_ctx",
-		Keywords="Play Sound Audio Location"
+		Latent, LatentInfo="latentInfo",
+		HidePin = "worldCtx", DefaultToSelf = "worldCtx"
 	))
 	/** Play audio at a location and listen for the audio to finish */
 	static void PlaySoundAtLocation(
-		/* Async stuff: */ UObject* world_ctx, FLatentActionInfo latent_info,
+		/* Async stuff: */ UObject* worldCtx, FLatentActionInfo latentInfo,
 		FVector location,
 		USoundBase* sound,
 		USoundAttenuation* attenuation,
