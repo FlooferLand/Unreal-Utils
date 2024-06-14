@@ -1,17 +1,17 @@
 ﻿#include "AudioPlaybackAction.h"
 
-#include "BackendUtil.h"
+#include "RoggingReehehehe.h"
 #include "Components/AudioComponent.h"
 
 FAudioPlaybackAction::FAudioPlaybackAction(const FLatentActionInfo& info, UAudioComponent* audioComp, USoundBase* sound) {
 	// Safety guard
 	AudioComponent = TStrongObjectPtr(audioComp);
 	if (!IsValid(audioComp)) {
-		BackendUtil::LogError("No audio component passed to AudioPlaybackAction");
+		FRoggingReehehehe::Error("No audio component passed to AudioPlaybackAction");
 		return;
 	}
 	if (!IsValid(sound)) {
-		BackendUtil::LogError("No sound passed to AudioPlaybackAction");
+		FRoggingReehehehe::Error("No sound passed to AudioPlaybackAction");
 		return;
 	}
 

@@ -1,6 +1,6 @@
 ﻿#include "AudioUtil.h"
 #include "AudioPlaybackAction.h"
-#include "BackendUtil.h"
+#include "RoggingReehehehe.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
 
@@ -11,7 +11,7 @@ void UAudioUtil::PlaySoundCore(
 {
 	// World stuff
 	if (!IsValid(worldCtx) || !IsValid(audioComp) || !IsValid(sound)) {
-		BackendUtil::LogError("Safety guard in UAudioUtil::PlaySoundAttached failed");
+		FRoggingReehehehe::Error("Safety guard in UAudioUtil::PlaySoundAttached failed");
 		return;
 	}
 	audioComp->bAutoDestroy = false;
@@ -19,7 +19,7 @@ void UAudioUtil::PlaySoundCore(
 	// Spawning the action
 	UWorld* world = worldCtx->GetWorld();
 	if (!IsValid(world)) {
-		BackendUtil::LogError("Invalid world in PlaySoundCore");
+		FRoggingReehehehe::Error("Invalid world in PlaySoundCore");
 		return;
 	}
 	FLatentActionManager& actionManager = world->GetLatentActionManager();
@@ -48,7 +48,7 @@ void UAudioUtil::PlaySoundAttached(
 	float volume, float pitch)
 {
 	if (!IsValid(sound) || !IsValid(attachComp)) {
-		BackendUtil::LogError("Safety guard in UAudioUtil::PlaySoundAttached failed");
+		FRoggingReehehehe::Error("Safety guard in UAudioUtil::PlaySoundAttached failed");
 		return;
 	}
 	
@@ -70,7 +70,7 @@ void UAudioUtil::PlaySoundAtLocation(
 	float volume, float pitch)
 {
 	if (!IsValid(worldCtx) && !IsValid(sound) && !IsValid(attenuation)) {
-		BackendUtil::LogError("Safety guard in UAudioUtil::PlaySoundAtLocation failed");
+		FRoggingReehehehe::Error("Safety guard in UAudioUtil::PlaySoundAtLocation failed");
 		return;
 	}
 	
